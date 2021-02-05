@@ -7,7 +7,7 @@
         <el-submenu index="1-4">
           <template slot="title">ONU预配置</template>
           <el-menu-item index="/onu/index">查看ONU预配置</el-menu-item>
-          <el-menu-item index="/onu/create">新建ONU预配置</el-menu-item>
+          <el-menu-item index="/onu/create">新增ONU预配置</el-menu-item>
         </el-submenu>
       </el-submenu>
 

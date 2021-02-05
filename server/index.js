@@ -1,5 +1,6 @@
 const express = require('express')
 const app = express()
+var moment = require("moment"); 
 
 app.use(require('cors')())
 app.use(express.json())
@@ -11,13 +12,20 @@ mongoose.connect('mongodb://172.17.61.25:27017/olt', {
     useCreateIndex: true
 })
 const OnuPreconfig = mongoose.model('OnuPreconfig', new mongoose.Schema({
-    mac: { type: String },
+    mac: { type: String , required: true, index: true },
     lanport: { type: Number },
     vlanmode: { type: String },
     servicetype: { type: String },
     vlanid: { type: Number },
-    createtime: { type: Date, default:Date.now },
+    createtime: { type: Date, default:Date.now, get: v => moment(v).format('YYYY-MM-DD HH:mm')},
+    status: { type:Boolean , default: false, get: v => {
+        if(v == true) return '已完成'
+        else return '未配置'
+    } },
     finishtime: { type: Date },
+},
+{
+    toJSON: {getters: true}
 }))
 
 app.get('/', async (req, res) => {
@@ -29,7 +37,7 @@ app.post('/api/onu/preconfig', async (req, res) => {
 })
 
 app.get('/api/onu/preconfig', async(req,res)=>{
-    const preconfigs = await OnuPreconfig.find()
+    let preconfigs = await OnuPreconfig.find()
     res.send(preconfigs)
 })
 
@@ -41,7 +49,9 @@ app.delete('/api/onu/preconfig/:id', async(req,res)=> {
 })
 
 app.get('/api/onu/preconfig/:id', async(req,res)=> {
-    const preconfig = await OnuPreconfig.findById(req.params.id)
+    let preconfig = await OnuPreconfig.findById(req.params.id)
+ //   preconfig = preconfig.toJSON({getters: true})
+    console.log(preconfig)
     res.send(preconfig)
 })
 

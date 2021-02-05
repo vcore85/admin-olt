@@ -1,20 +1,23 @@
 <template>
     <div>
-
-        <el-table :data="preconfigs">
-        <el-table-column prop="mac" label="物理地址" width="140">
+        <el-button @click="resetDateFilter">清除日期过滤器</el-button>
+        <el-button @click="clearFilter">清除所有过滤器</el-button>
+        <el-table ref="filterTable" :data="preconfigs">
+        <el-table-column prop="mac" label="物理地址" width="140" :filter-method="filterHandler" sortable>
         </el-table-column>
         <el-table-column prop="lanport" label="lan端口号" width="120">
         </el-table-column>
-        <el-table-column prop="vlanmode" label="vlan模式">
+        <el-table-column prop="vlanmode" label="vlan模式" sortable :filters="[{ text: 'tag', value: 'tag' }, { text: '透传', value: '透传' }]" :filter-method="filterHandler">
         </el-table-column>
-        <el-table-column prop="servicetype" label="服务类型">
+        <el-table-column prop="servicetype" label="服务类型" :filters="[{ text: 'unicast', value: 'unicast' }, { text: 'multicast', value: 'multicast' }]" :filter-method="filterHandler">
         </el-table-column>
-        <el-table-column prop="vlanid" label="vlanID">
+        <el-table-column prop="vlanid" label="vlanID" sortable>
         </el-table-column>
-        <el-table-column prop="createtime" label="创建时间">
+        <el-table-column prop="createtime" label="创建时间"  sortable>
         </el-table-column>
-        <el-table-column prop="" label="触发时间">
+        <el-table-column prop="status" label="配置状态" :filters="[{ text: '未配置', value: '未配置' }, { text: '已完成', value: '已完成' }]" :filter-method="filterHandler" >
+        </el-table-column>
+        <el-table-column prop="finishtime" label="配置时间" sortable>
         </el-table-column>
         <el-table-column
         fixed="right"
@@ -55,7 +58,17 @@ export default {
         })
       this.fetch()
       })
-    }
+    },
+    filterHandler(value, row, column) {
+      const property = column['property'];
+      return row[property] === value;
+    },
+    resetDateFilter() {
+      this.$refs.filterTable.clearFilter('date');
+    },
+    clearFilter() {
+      this.$refs.filterTable.clearFilter();
+    },
   },
 
   created () {
