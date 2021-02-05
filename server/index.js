@@ -15,7 +15,9 @@ const OnuPreconfig = mongoose.model('OnuPreconfig', new mongoose.Schema({
     lanport: { type: Number },
     vlanmode: { type: String },
     servicetype: { type: String },
-    vlanid: { type: Number }
+    vlanid: { type: Number },
+    createtime: { type: Date, default:Date.now },
+    finishtime: { type: Date },
 }))
 
 app.get('/', async (req, res) => {
@@ -23,6 +25,28 @@ app.get('/', async (req, res) => {
 })
 app.post('/api/onu/preconfig', async (req, res) => {
     const preconfig = await OnuPreconfig.create(req.body)
+    res.send(preconfig)
+})
+
+app.get('/api/onu/preconfig', async(req,res)=>{
+    const preconfigs = await OnuPreconfig.find()
+    res.send(preconfigs)
+})
+
+app.delete('/api/onu/preconfig/:id', async(req,res)=> {
+    await OnuPreconfig.findByIdAndDelete(req.params.id)
+    res.send({
+        status: true
+    })
+})
+
+app.get('/api/onu/preconfig/:id', async(req,res)=> {
+    const preconfig = await OnuPreconfig.findById(req.params.id)
+    res.send(preconfig)
+})
+
+app.put('/api/onu/preconfig/:id', async(req,res)=> {
+    const preconfig = await OnuPreconfig.findByIdAndUpdate(req.params.id, req.body)
     res.send(preconfig)
 })
 

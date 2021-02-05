@@ -33,7 +33,7 @@
       <el-input type="textarea" v-model="onupreconfig.vlanid"></el-input>
     </el-form-item>
     <el-form-item>
-      <el-button type="primary" native-type="submit">立即创建</el-button>
+      <el-button type="primary" native-type="submit">保存</el-button>
       <el-button @click="goback()">取消</el-button>
     </el-form-item>
   </el-form>
@@ -47,17 +47,26 @@ export default {
   },
   methods: {
     savePreconfig () {
-      this.$http.post('onu/preconfig', this.onupreconfig).then(res => { // eslint-disable-line no-unused-vars
+      this.$http.put(`onu/preconfig/${this.$route.params.id}`, this.onupreconfig).then(res => { // eslint-disable-line no-unused-vars
         this.$message({
-          message: '预配置创建成功',
+          message: '预配置修改成功',
           type: 'success'
         });
         this.$router.push('/onu/index')
       })
     },
+    fetch(){
+      this.$http.get(`onu/preconfig/${this.$route.params.id}`).then(res => {
+        this.onupreconfig = res.data
+      })
+    },
     goback(){
       this.$router.push('/onu/index')
     }
-  }
+
+  },
+      created(){
+      this.fetch()
+    }
 }
 </script>
