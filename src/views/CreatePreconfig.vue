@@ -40,24 +40,25 @@
 </template>
 <script>
 export default {
-  data () {
+  data() {
     return {
-      onupreconfig: {}
-    }
+      onupreconfig: {},
+    };
   },
   methods: {
-    savePreconfig () {
-      this.$http.post('onu/preconfig', this.onupreconfig).then(res => { // eslint-disable-line no-unused-vars
+    savePreconfig() {
+      this.$http.post("onu/preconfig", this.onupreconfig).then((res) => {
+        // eslint-disable-line no-unused-vars
         this.$message({
-          message: '预配置创建成功',
-          type: 'success'
+          message: "预配置创建成功",
+          type: "success",
         });
-        this.$router.push('/onu/index')
-      })
+        this.$router.push("/onu/index");
+      });
     },
-    goback(){
-      this.$router.push('/onu/index')
-    }
-  }
-}
+    goback() {
+      this.$router.push("/onu/index");
+    },
+  },
+};
 </script>

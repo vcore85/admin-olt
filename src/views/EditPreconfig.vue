@@ -40,33 +40,35 @@
 </template>
 <script>
 export default {
-  data () {
+  data() {
     return {
-      onupreconfig: {}
-    }
+      onupreconfig: {},
+    };
   },
   methods: {
-    savePreconfig () {
-      this.$http.put(`onu/preconfig/${this.$route.params.id}`, this.onupreconfig).then(res => { // eslint-disable-line no-unused-vars
-        this.$message({
-          message: '预配置修改成功',
-          type: 'success'
+    savePreconfig() {
+      this.$http
+        .put(`onu/preconfig/${this.$route.params.id}`, this.onupreconfig)
+        .then((res) => {
+          // eslint-disable-line no-unused-vars
+          this.$message({
+            message: "预配置修改成功",
+            type: "success",
+          });
+          this.$router.push("/onu/index");
         });
-        this.$router.push('/onu/index')
-      })
     },
-    fetch(){
-      this.$http.get(`onu/preconfig/${this.$route.params.id}`).then(res => {
-        this.onupreconfig = res.data
-      })
+    fetch() {
+      this.$http.get(`onu/preconfig/${this.$route.params.id}`).then((res) => {
+        this.onupreconfig = res.data;
+      });
     },
-    goback(){
-      this.$router.push('/onu/index')
-    }
-
+    goback() {
+      this.$router.push("/onu/index");
+    },
   },
-      created(){
-      this.fetch()
-    }
-}
+  created() {
+    this.fetch();
+  },
+};
 </script>

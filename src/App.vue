@@ -3,7 +3,7 @@
   <el-aside width="200px" style="background-color: rgb(238, 241, 246)">
     <el-menu router :default-openeds="['1']">
       <el-submenu index="1">
-        <template slot="title"><i class="el-icon-setting"></i>OLT管理</template>
+        <template slot="title"><i class="el-icon-setting"></i>光纤业务配置系统</template>
         <el-submenu index="1-4">
           <template slot="title">ONU预配置</template>
           <el-menu-item index="/onu/index">查看ONU预配置</el-menu-item>
@@ -24,7 +24,7 @@
           <el-dropdown-item>删除</el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
-      <span>OLT管理系统</span>
+      <span>鞍山分公司技术部</span>
     </el-header>
 
     <el-main>
