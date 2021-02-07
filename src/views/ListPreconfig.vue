@@ -1,31 +1,18 @@
 <template>
   <div>
-    <el-row align="middle">
-      <el-col :xs="4" :sm="6" :md="8" :lg="9" :xl="10">
-        <el-button @click="resetDateFilter">清除日期过滤器</el-button>
-        <el-button @click="clearFilter">清除所有过滤器</el-button>
-      </el-col>
-      <el-col
-        :xs="2"
-        :sm="2"
-        :md="2"
-        :lg="2"
-        :xl="2"
-        align="middle"
-        vertical-align="middle"
-      >
-        按MAC搜索:
-      </el-col>
-      <el-col :xs="4" :sm="6" :md="8" :lg="9" :xl="4">
-        <el-input placeholder="请输入内容" v-model="mac_tmp">
-          <el-button
-            slot="append"
-            @click="searchmac(mac_tmp)"
-            icon="el-icon-search"
-          ></el-button>
-        </el-input>
-      </el-col>
-    </el-row>
+    <el-form :inline="true" class="demo-form-inline">
+      <el-form-item label="MAC查询">
+        <el-input
+          v-model="mac_tmp"
+          placeholder="输入光猫MAC"
+          @keypress.enter.native="searchmac(mac_tmp)"
+        ></el-input>
+      </el-form-item>
+      <el-form-item>
+        <el-button type="primary" @click="searchmac(mac_tmp)">查询</el-button>
+      </el-form-item>
+    </el-form>
+
     <el-table ref="filterTable" :data="preconfigs">
       <el-table-column prop="oltname" label="所属OLT" width="120">
       </el-table-column>
@@ -86,37 +73,7 @@
     </el-table>
   </div>
 </template>
-<style>
-.el-row {
-  margin-bottom: 20px;
-  height: 100%;
-  &:last-child {
-    margin-bottom: 0;
-  }
-}
-.el-col {
-  border-radius: 4px;
 
-  height: 40px;
-}
-.bg-purple-dark {
-  background: #99a9bf;
-}
-.bg-purple {
-  background: #d3dce6;
-}
-.bg-purple-light {
-  background: #e5e9f2;
-}
-.grid-content {
-  border-radius: 4px;
-  min-height: 36px;
-}
-.row-bg {
-  padding: 10px 0;
-  background-color: #f9fafc;
-}
-</style>
 
 <script>
 export default {
@@ -139,6 +96,7 @@ export default {
         });
       else this.fetch();
     },
+
     edit(id) {
       this.$router.push(`/onu/edit/${id}`);
     },

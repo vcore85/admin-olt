@@ -28,7 +28,16 @@ const OnuPreconfig = mongoose.model('OnuPreconfig', new mongoose.Schema({
 },
     {
         toJSON: { getters: true }
-    }))
+    }
+))
+const OltInfo = mongoose.model('OltInfo', new mongoose.Schema({
+    name: { type: String, required: true, index: true },
+    ipaddr: { type: String, required: true, },
+    snmpro: { type: String },
+    snmprw: { type: String },
+    area: { type: String }
+}
+))
 
 app.get('/', async (req, res) => {
     res.send('index')
