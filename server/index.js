@@ -44,7 +44,8 @@ const OltInfo = mongoose.model('OltInfo', new mongoose.Schema({
 const Area = mongoose.model('Area', new mongoose.Schema({
     name: { type: String, required: true, index: true },
     level: { type: Number, required: true, },
-    belongtoid: { type: String }
+    belongtoid: { type: String },
+    fullname: { type: String }
 }
 ))
 
@@ -53,11 +54,27 @@ app.get('/', async (req, res) => {
     res.send('')
 })
 
-app.post('/api/area/', async (req, res) => {
+//新增区域
+app.post('/api/area', async (req, res) => {
     const area = await Area.create(req.body)
     res.send({
         status: true
     })
+})
+
+//获取所有区域
+app.get('/api/area', async (req, res) => {
+    const area = await Area.find()
+    console.log(area)
+    res.send(area)
+})
+
+//搜索区域
+app.get('/api/area/searchname/:name', async (req, res) => {
+    const area = await Area.find({ name: { $regex: req.params.name } })
+    //   preconfig = preconfig.toJSON({getters: true})
+    console.log(area)
+    res.send(area)
 })
 
 //新增ONU预配置

@@ -9,19 +9,35 @@
     <el-form-item label="区域级别">
       <el-tooltip
         class="item"
-        effect="dark"
-        content="Right Center 提示文字"
+        effect="light"
+        content="1级为市级分公司，2级为区级分公司"
         placement="right"
       >
         <el-select v-model="area.level" placeholder="请选择区域级别">
           <el-option label="1" value="1"></el-option>
           <el-option label="2" value="2"></el-option>
-          <el-option label="2" value="3"></el-option>
+          <el-option label="3" value="3"></el-option>
         </el-select>
       </el-tooltip>
     </el-form-item>
     <el-form-item label="上级区域">
-      <el-input v-model="area.belongto"></el-input>
+      <el-select
+        v-model="area.belongtoid"
+        filterable
+        remote
+        reserve-keyword
+        placeholder="请输入上级区域查询"
+        :remote-method="remoteMethod"
+        :loading="loading"
+      >
+        <el-option
+          v-for="item in options"
+          :key="item.value"
+          :label="item.label"
+          :value="item.value"
+        >
+        </el-option>
+      </el-select>
     </el-form-item>
     <el-form-item>
       <el-button type="primary" @click="savePreconfig">立即创建</el-button>
@@ -34,21 +50,48 @@ export default {
   data() {
     return {
       area: {},
+      options: [],
+      arealist: [],
+      loading: false,
+      value: [],
     };
   },
   methods: {
     savePreconfig() {
-      this.$http.post("onu/preconfig", this.onupreconfig).then((res) => {
+      this.$http.post("area", this.area).then((res) => {
         // eslint-disable-line no-unused-vars
         this.$message({
-          message: "预配置创建成功",
+          message: "区域创建成功",
           type: "success",
         });
-        this.$router.push("/onu/index");
+        //  this.$router.push("/onu/index");
       });
     },
     goback() {
-      this.$router.push("/onu/index");
+      // this.$router.push("/onu/index");
+    },
+    remoteMethod(query) {
+      if (query !== "") {
+        this.$http.get(`area`).then((res) => {
+          let aa = res.data;
+          aa.map((item) => {
+            this.arealist.push({
+              label: item.name,
+              value: item._id,
+            });
+          });
+        });
+        this.loading = true;
+        this.arealist = [];
+        setTimeout(() => {
+          this.loading = false;
+          this.options = this.arealist.filter((item) => {
+            return item.label.toLowerCase().indexOf(query.toLowerCase()) > -1;
+          });
+        }, 200);
+      } else {
+        this.options = [];
+      }
     },
   },
 };
