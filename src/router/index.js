@@ -1,8 +1,9 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import ListPreconfig from '../views/ListPreconfig.vue'
-import CreatePreconfig from '../views/CreatePreconfig.vue'
+import AddPreconfig from '../views/AddPreconfig.vue'
 import EditPreconfig from '../views/EditPreconfig.vue'
+import AddArea from '../views/AddArea.vue'
 
 Vue.use(VueRouter)
 
@@ -10,10 +11,10 @@ const routes = [
   {
     path: '/',
     name: 'Home',
-    redirect: '/onu/index'
+    redirect: '/onu/preconfig/index'
   },
   {
-    path: '/onu/index',
+    path: '/onu/preconfig/index',
     name: 'List-Preconfig',
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
@@ -21,14 +22,19 @@ const routes = [
     component: ListPreconfig
   },
   {
-    path: '/onu/create',
-    name: 'Create-Preconfig',
-    component: CreatePreconfig
+    path: '/onu/preconfig/add',
+    name: 'Add-Preconfig',
+    component: AddPreconfig
   },
   {
-    path: '/onu/edit/:id',
+    path: '/onu/preconfig/edit/:id',
     name: 'Edit-Preconfig',
     component: EditPreconfig
+  },
+  {
+    path: '/area/add',
+    name: 'Add-Area',
+    component: AddArea
   }
 ]
 

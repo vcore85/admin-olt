@@ -1,18 +1,24 @@
 <template>
-  <el-form
-    @submit.native.prevent="savePreconfig"
-    ref="form"
-    :model="onupreconfig"
-    label-width="80px"
-  >
-    <el-form-item label="物理地址">
-      <el-input v-model="onupreconfig.mac"></el-input>
+  <el-form ref="form" :model="area" label-width="80px" style="width: 300px">
+    <el-form-item label="区域名称">
+      <el-input
+        v-model="area.name"
+        placeholder="请输入区域名称（市级分公司、区域分公司）"
+      ></el-input>
     </el-form-item>
-    <el-form-item label="lan端口号">
-      <el-select v-model="onupreconfig.lanport" placeholder="请选择lan端口号">
-        <el-option label="1" value="1"></el-option>
-        <el-option label="2" value="2"></el-option>
-      </el-select>
+    <el-form-item label="区域级别">
+      <el-tooltip
+        class="item"
+        effect="dark"
+        content="Right Center 提示文字"
+        placement="right"
+      >
+        <el-select v-model="area.level" placeholder="请选择区域级别">
+          <el-option label="1" value="1"></el-option>
+          <el-option label="2" value="2"></el-option>
+          <el-option label="2" value="3"></el-option>
+        </el-select>
+      </el-tooltip>
     </el-form-item>
     <el-form-item label="vlan模式">
       <el-select v-model="onupreconfig.vlanmode" placeholder="请选择vlan模式">
@@ -30,10 +36,10 @@
       </el-select>
     </el-form-item>
     <el-form-item label="vlanID">
-      <el-input type="textarea" v-model="onupreconfig.vlanid"></el-input>
+      <el-input v-model="onupreconfig.vlanid"></el-input>
     </el-form-item>
     <el-form-item>
-      <el-button type="primary" native-type="submit">立即创建</el-button>
+      <el-button type="primary" @click="savePreconfig">立即创建</el-button>
       <el-button @click="goback()">取消</el-button>
     </el-form-item>
   </el-form>

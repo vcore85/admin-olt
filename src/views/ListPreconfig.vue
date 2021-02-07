@@ -55,6 +55,7 @@
           { text: '已完成', value: '已完成' },
         ]"
         :filter-method="filterHandler"
+        :formatter="statusFormatter"
       >
       </el-table-column>
       <el-table-column prop="finishtime" label="配置时间" width="160" sortable>
@@ -98,7 +99,7 @@ export default {
     },
 
     edit(id) {
-      this.$router.push(`/onu/edit/${id}`);
+      this.$router.push(`/onu/preconfig/edit/${id}`);
     },
     remove(id) {
       this.$http.delete(`onu/preconfig/${id}`).then((res) => {
@@ -118,6 +119,14 @@ export default {
     },
     clearFilter() {
       this.$refs.filterTable.clearFilter();
+    },
+    statusFormatter(row, column) {
+      let status = row.status;
+      if (status === false) {
+        return "未配置";
+      } else {
+        return "已配置";
+      }
     },
   },
 

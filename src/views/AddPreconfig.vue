@@ -1,12 +1,15 @@
 <template>
   <el-form
-    @submit.native.prevent="savePreconfig"
     ref="form"
     :model="onupreconfig"
     label-width="80px"
+    style="width: 300px"
   >
     <el-form-item label="物理地址">
-      <el-input v-model="onupreconfig.mac"></el-input>
+      <el-input
+        v-model="onupreconfig.mac"
+        placeholder="请输入光猫MAC地址"
+      ></el-input>
     </el-form-item>
     <el-form-item label="lan端口号">
       <el-select v-model="onupreconfig.lanport" placeholder="请选择lan端口号">
@@ -30,10 +33,10 @@
       </el-select>
     </el-form-item>
     <el-form-item label="vlanID">
-      <el-input type="textarea" v-model="onupreconfig.vlanid"></el-input>
+      <el-input v-model="onupreconfig.vlanid"></el-input>
     </el-form-item>
     <el-form-item>
-      <el-button type="primary" native-type="submit">保存</el-button>
+      <el-button type="primary" @click="savePreconfig">立即创建</el-button>
       <el-button @click="goback()">取消</el-button>
     </el-form-item>
   </el-form>
@@ -47,28 +50,18 @@ export default {
   },
   methods: {
     savePreconfig() {
-      this.$http
-        .put(`onu/preconfig/${this.$route.params.id}`, this.onupreconfig)
-        .then((res) => {
-          // eslint-disable-line no-unused-vars
-          this.$message({
-            message: "预配置修改成功",
-            type: "success",
-          });
-          this.$router.push("/onu/preconfig/index");
+      this.$http.post("onu/preconfig", this.onupreconfig).then((res) => {
+        // eslint-disable-line no-unused-vars
+        this.$message({
+          message: "预配置创建成功",
+          type: "success",
         });
-    },
-    fetch() {
-      this.$http.get(`onu/preconfig/${this.$route.params.id}`).then((res) => {
-        this.onupreconfig = res.data;
+        this.$router.push("/onu/preconfig/index");
       });
     },
     goback() {
       this.$router.push("/onu/preconfig/index");
     },
-  },
-  created() {
-    this.fetch();
   },
 };
 </script>
