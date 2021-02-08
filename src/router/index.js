@@ -5,6 +5,7 @@ import AddPreconfig from '../views/AddPreconfig.vue'
 import EditPreconfig from '../views/EditPreconfig.vue'
 import AddArea from '../views/AddArea.vue'
 import ListArea from '../views/ListArea.vue'
+import EditArea from '../views/EditArea.vue'
 
 Vue.use(VueRouter)
 
@@ -41,6 +42,11 @@ const routes = [
     path: '/area/index',
     name: 'List-Area',
     component: ListArea
+  },
+  {
+    path: '/area/edit',
+    name: 'Edit-Area',
+    component: EditArea
   }
 
 ]
