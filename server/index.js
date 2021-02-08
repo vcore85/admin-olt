@@ -140,7 +140,13 @@ app.delete('/api/area/:id', async (req, res) => {
         status: true
     })
 })
-
+//修改区域
+app.put('/api/area/edit/:id', async (req, res) => {
+    const area = await Area.findByIdAndUpdate(req.params.id, _.pick(req.body, ['name', 'level', 'parent']))
+    res.send({
+        status: true
+    })
+})
 //新增ONU预配置
 app.post('/api/onu/preconfig', async (req, res) => {
     const preconfig = await OnuPreconfig.create(req.body)

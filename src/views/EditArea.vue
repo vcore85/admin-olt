@@ -1,7 +1,11 @@
 <template>
   <el-form ref="form" :model="area" label-width="80px" style="width: 300px">
     <el-form-item label="区域名称">
-      <el-input v-model="area.name" placeholder="请输入区域名称"></el-input>
+      <el-input
+        v-model="area.name"
+        placeholder="请输入区域名称"
+        @input="updateForce"
+      ></el-input>
     </el-form-item>
     <el-form-item label="区域级别">
       <el-tooltip
@@ -59,8 +63,6 @@ export default {
   },
   methods: {
     fetch() {
-      console.log(this.$route.params.id);
-
       this.$http.get(`area/searchid/${this.$route.params.id}`).then((res) => {
         this.area.name = res.data.name;
         this.area._id = res.data._id;
@@ -147,7 +149,7 @@ export default {
 
   created() {
     this.fetch();
-    this.updateForce();
+    //  this.updateForce();
   },
 };
 </script>
