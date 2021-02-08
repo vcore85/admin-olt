@@ -25,7 +25,7 @@
 
     <el-container>
       <el-aside width="200px" style="background-color: rgb(238, 241, 246)">
-        <el-menu router :default-openeds="['1']">
+        <el-menu router :default-openeds="['1', '2']">
           <el-submenu index="1">
             <template slot="title"
               ><i class="el-icon-setting"></i>ONU预配置</template

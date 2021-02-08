@@ -13,7 +13,11 @@
         content="1级为市级分公司，2级为区级分公司"
         placement="right"
       >
-        <el-select v-model="area.level" placeholder="请选择区域级别">
+        <el-select
+          v-model="area.level"
+          placeholder="请选择区域级别"
+          @change="changeLevel"
+        >
           <el-option label="1" value="1"></el-option>
           <el-option label="2" value="2"></el-option>
           <el-option label="3" value="3"></el-option>
@@ -22,13 +26,19 @@
     </el-form-item>
     <el-form-item label="上级区域">
       <el-select
-        v-model="area.belongtoid"
+        v-model="area.parent"
         filterable
+        clearable
         remote
+        autocomplete
+        automatic-dropdown
         reserve-keyword
         placeholder="请输入上级区域查询"
         :remote-method="remoteMethod"
         :loading="loading"
+        @focus="remoteMethodClick"
+        name="belongtoSelect"
+        @change="updateForce"
       >
         <el-option
           v-for="item in options"
@@ -58,6 +68,7 @@ export default {
   },
   methods: {
     savePreconfig() {
+      if (this.area.parent === "") this.area.parent = null;
       this.$http.post("area", this.area).then((res) => {
         // eslint-disable-line no-unused-vars
         this.$message({
@@ -71,16 +82,18 @@ export default {
       // this.$router.push("/onu/index");
     },
     remoteMethod(query) {
-      if (query !== "") {
-        this.$http.get(`area`).then((res) => {
-          let aa = res.data;
-          aa.map((item) => {
-            this.arealist.push({
-              label: item.name,
-              value: item._id,
+      if (query !== "" && !isNaN(this.area.level)) {
+        this.$http
+          .get(`area/searchlevel/${this.area.level - 1}`)
+          .then((res) => {
+            let aa = res.data;
+            aa.map((item) => {
+              this.arealist.push({
+                label: item.name,
+                value: item._id,
+              });
             });
           });
-        });
         this.loading = true;
         this.arealist = [];
         setTimeout(() => {
@@ -92,6 +105,35 @@ export default {
       } else {
         this.options = [];
       }
+    },
+
+    remoteMethodClick(query) {
+      if (!isNaN(this.area.level)) {
+        this.$http
+          .get(`area/searchlevel/${this.area.level - 1}`)
+          .then((res) => {
+            let aa = res.data;
+            aa.map((item) => {
+              this.arealist.push({
+                label: item.name,
+                value: item._id,
+              });
+            });
+          });
+        this.loading = true;
+        this.arealist = [];
+        setTimeout(() => {
+          this.loading = false;
+          this.options = this.arealist;
+        }, 200);
+      }
+    },
+    changeLevel() {
+      this.options = [];
+      this.area.parent = "";
+    },
+    updateForce() {
+      this.$forceUpdate();
     },
   },
 };
