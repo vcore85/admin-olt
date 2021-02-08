@@ -44,7 +44,7 @@ const routes = [
     component: ListArea
   },
   {
-    path: '/area/edit',
+    path: '/area/edit/:id',
     name: 'Edit-Area',
     component: EditArea
   }

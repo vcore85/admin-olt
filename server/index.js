@@ -76,7 +76,6 @@ app.get('/api/area', async (req, res) => {
 app.get('/api/area/parent', async (req, res) => {
     const area = await Area.aggregate([
         {
-
             $lookup: {
                 from: 'areas',
                 localField: 'parent',
@@ -84,7 +83,6 @@ app.get('/api/area/parent', async (req, res) => {
                 as: 'parents'
             }
         }
-
     ])
     console.log(area)
     res.send(area)
@@ -105,9 +103,18 @@ app.get('/api/area/searchlevel/:level', async (req, res) => {
     console.log(area)
     res.send(area)
 })
+//搜索区域（id）
+app.get('/api/area/searchid/:id', async (req, res) => {
+    const area = await Area.findOne({ _id: req.params.id })
+    //   preconfig = preconfig.toJSON({getters: true})
+    console.log(area)
+    res.send(area)
+})
 
 //编辑单个区域
 app.get('/api/area/edit/:id', async (req, res) => {
+    console.log(req.params.id)
+    console.log('OK')
     const area = await Area.aggregate([
         {
             $match: {
@@ -122,7 +129,6 @@ app.get('/api/area/edit/:id', async (req, res) => {
                 as: 'parents'
             }
         }
-
     ])
     res.send(area)
 })

@@ -25,16 +25,11 @@
       <el-select
         v-model="area.parent"
         filterable
-        clearable
         remote
-        autocomplete
-        automatic-dropdown
-        reserve-keyword
         placeholder="请输入上级区域查询"
         :remote-method="remoteMethod"
         :loading="loading"
         @focus="remoteMethodClick"
-        name="belongtoSelect"
         @change="updateForce"
       >
         <el-option
@@ -47,7 +42,7 @@
       </el-select>
     </el-form-item>
     <el-form-item>
-      <el-button type="primary" @click="savePreconfig">立即创建</el-button>
+      <el-button type="primary" @click="saveArea">立即修改</el-button>
       <el-button @click="goback()">取消</el-button>
     </el-form-item>
   </el-form>
@@ -60,28 +55,37 @@ export default {
       options: [],
       arealist: [],
       loading: false,
-      value: [],
     };
   },
   methods: {
-    savePreconfig() {
-      this.$http
-        .put(`area/${this.$route.params.id}`, this.onupreconfig)
-        .then((res) => {
-          // eslint-disable-line no-unused-vars
-          this.$message({
-            message: "区域修改成功",
-            type: "success",
-          });
-          this.$router.push("/area/index");
-        });
-    },
     fetch() {
       console.log(this.$route.params.id);
-      this.$http.get(`area/edit/${this.$route.params.id}`).then((res) => {
-        this.area = res.data;
+
+      this.$http.get(`area/searchid/${this.$route.params.id}`).then((res) => {
+        this.area.name = res.data.name;
+        this.area._id = res.data._id;
+        this.area.level = res.data.level;
+        this.area.parent = null;
+      });
+      //页面重新渲染数据
+      this.loading = true;
+      setTimeout(() => {
+        this.loading = false;
+        this.options = [];
+      }, 200);
+    },
+
+    saveArea() {
+      this.$http.put(`area/${this.$route.params.id}`, this.area).then((res) => {
+        // eslint-disable-line no-unused-vars
+        this.$message({
+          message: "区域修改成功",
+          type: "success",
+        });
+        this.$router.push("/area/index");
       });
     },
+
     goback() {
       this.$router.push("/area/index");
     },
@@ -140,8 +144,10 @@ export default {
       this.$forceUpdate();
     },
   },
+
   created() {
     this.fetch();
+    this.updateForce();
   },
 };
 </script>
