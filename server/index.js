@@ -111,7 +111,7 @@ app.get('/api/area/searchid/:id', async (req, res) => {
     res.send(area)
 })
 
-//编辑单个区域
+//编辑获取单个区域
 app.get('/api/area/edit/:id', async (req, res) => {
     console.log(req.params.id)
     console.log('OK')

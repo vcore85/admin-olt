@@ -67,7 +67,13 @@ export default {
         this.area.name = res.data.name;
         this.area._id = res.data._id;
         this.area.level = res.data.level;
-        this.area.parent = null;
+        this.$http.get(`area/searchid/${res.data.parent}`).then((res2) => {
+          this.options.push({
+            label: res2.data.name,
+            value: res2.data._id,
+          });
+          this.area.parent = res2.data._id;
+        });
       });
       //页面重新渲染数据
       this.loading = true;
@@ -76,16 +82,17 @@ export default {
         this.options = [];
       }, 200);
     },
-
     saveArea() {
-      this.$http.put(`area/${this.$route.params.id}`, this.area).then((res) => {
-        // eslint-disable-line no-unused-vars
-        this.$message({
-          message: "区域修改成功",
-          type: "success",
+      this.$http
+        .put(`area/edit/${this.$route.params.id}`, this.area)
+        .then((res) => {
+          // eslint-disable-line no-unused-vars
+          this.$message({
+            message: "区域修改成功",
+            type: "success",
+          });
+          this.$router.push("/area/index");
         });
-        this.$router.push("/area/index");
-      });
     },
 
     goback() {
