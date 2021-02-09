@@ -142,7 +142,7 @@ app.delete('/api/area/:id', async (req, res) => {
 })
 //修改区域
 app.put('/api/area/edit/:id', async (req, res) => {
-    const area = await Area.findByIdAndUpdate(req.params.id, _.pick(req.body, ['name', 'level', 'parent']))
+    const area = await Area.findByIdAndUpdate(req.params.id, _.pick(req.body, ['name', 'level', 'parent', 'fullname']))
     res.send({
         status: true
     })

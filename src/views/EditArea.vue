@@ -59,9 +59,15 @@ export default {
       options: [],
       arealist: [],
       loading: false,
+      areatmp: {},
     };
   },
   methods: {
+    async fetchparent(areaid) {
+      await this.$http.get(`area/searchid/${areaid}`).then((res) => {
+        this.areatmp = res.data;
+      });
+    },
     fetch() {
       this.$http.get(`area/searchid/${this.$route.params.id}`).then((res) => {
         this.area.name = res.data.name;
@@ -82,7 +88,20 @@ export default {
         this.options = [];
       }, 200);
     },
-    saveArea() {
+    async saveArea() {
+      this.area.fullname = this.area.name;
+      let parenttmp = "";
+      if (this.area.parent === "") {
+        this.area.parent = null;
+      } else {
+        parenttmp = this.area.parent;
+        this.areatmp = this.area;
+        for (let i = this.area.level; i > 1; i--) {
+          await this.fetchparent(this.areatmp.parent);
+          this.area.fullname = this.areatmp.name + this.area.fullname;
+          console.log("i = " + i + " ; fullname = " + this.area.fullname);
+        }
+      }
       this.$http
         .put(`area/edit/${this.$route.params.id}`, this.area)
         .then((res) => {

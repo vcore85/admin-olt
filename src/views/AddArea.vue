@@ -28,16 +28,12 @@
       <el-select
         v-model="area.parent"
         filterable
-        clearable
         remote
-        autocomplete
         automatic-dropdown
-        reserve-keyword
         placeholder="请输入上级区域查询"
         :remote-method="remoteMethod"
         :loading="loading"
         @focus="remoteMethodClick"
-        name="belongtoSelect"
         @change="updateForce"
       >
         <el-option
@@ -50,7 +46,7 @@
       </el-select>
     </el-form-item>
     <el-form-item>
-      <el-button type="primary" @click="savePreconfig">立即创建</el-button>
+      <el-button type="primary" @click="saveArea">立即创建</el-button>
       <el-button @click="goback()">取消</el-button>
     </el-form-item>
   </el-form>
@@ -64,23 +60,37 @@ export default {
       arealist: [],
       loading: false,
       value: [],
+      areatmp: {},
     };
   },
   methods: {
-    savePreconfig() {
-      if (this.area.parent === "") this.area.parent = null;
+    async fetchparent(areaid) {
+      await this.$http.get(`area/searchid/${areaid}`).then((res) => {
+        this.areatmp = res.data;
+      });
+    },
+    async saveArea() {
+      this.area.fullname = this.area.name;
+      let parenttmp = "";
+      if (this.area.parent === "") {
+        this.area.parent = null;
+      } else {
+        parenttmp = this.area.parent;
+        this.areatmp = this.area;
+        for (let i = this.area.level; i > 1; i--) {
+          await this.fetchparent(this.areatmp.parent);
+          this.area.fullname = this.areatmp.name + this.area.fullname;
+        }
+      }
       this.$http.post("area", this.area).then((res) => {
-        // eslint-disable-line no-unused-vars
         this.$message({
           message: "区域创建成功",
           type: "success",
         });
-        //  this.$router.push("/onu/index");
+        this.$router.push("/area/index");
       });
     },
-    goback() {
-      // this.$router.push("/onu/index");
-    },
+
     remoteMethod(query) {
       if (query !== "" && !isNaN(this.area.level)) {
         this.$http
